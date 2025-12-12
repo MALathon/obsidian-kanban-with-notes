@@ -252,19 +252,24 @@ export function astToUnhydratedBoard(
   const firstHeadingIndex = root.children.findIndex((child) => child.type === 'heading');
 
   if (firstHeadingIndex > 0) {
-    // There is content before the first heading
-    const preHeadingNodes = root.children.slice(0, firstHeadingIndex);
-    const firstNode = preHeadingNodes[0];
-    const lastNode = preHeadingNodes[preHeadingNodes.length - 1];
+    // There is content before the first heading - filter out yaml (frontmatter) nodes
+    const preHeadingNodes = root.children
+      .slice(0, firstHeadingIndex)
+      .filter((node) => node.type !== 'yaml');
 
-    if (firstNode.position && lastNode.position) {
-      const start = firstNode.position.start.offset;
-      const end = lastNode.position.end.offset;
-      const notesContent = md.slice(start, end).trim();
+    if (preHeadingNodes.length > 0) {
+      const firstNode = preHeadingNodes[0];
+      const lastNode = preHeadingNodes[preHeadingNodes.length - 1];
 
-      // Only set boardNotes if there's actual content (not just whitespace or settings blocks)
-      if (notesContent && !notesContent.startsWith('%% kanban:settings')) {
-        boardNotes = notesContent;
+      if (firstNode.position && lastNode.position) {
+        const start = firstNode.position.start.offset;
+        const end = lastNode.position.end.offset;
+        const notesContent = md.slice(start, end).trim();
+
+        // Only set boardNotes if there's actual content (not just whitespace or settings blocks)
+        if (notesContent && !notesContent.startsWith('%% kanban:settings')) {
+          boardNotes = notesContent;
+        }
       }
     }
   }
