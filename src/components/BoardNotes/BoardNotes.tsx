@@ -27,8 +27,8 @@ export function BoardNotes({ notes }: BoardNotesProps) {
 
   const [isCollapsed, setIsCollapsed] = useState<boolean>(defaultCollapsed ?? false);
 
-  // If board notes are disabled, don't render anything
-  if (isEnabled === false) {
+  // If board notes are disabled (or not explicitly enabled), don't render anything
+  if (!isEnabled) {
     return null;
   }
 

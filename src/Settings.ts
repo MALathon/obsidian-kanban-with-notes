@@ -495,7 +495,7 @@ export class SettingsManager {
             } else if (globalValue !== undefined) {
               toggle.setValue(globalValue as boolean);
             } else {
-              toggle.setValue(true); // Default to enabled
+              toggle.setValue(false); // Default to disabled
             }
 
             toggle.onChange((newValue) => {
@@ -511,7 +511,7 @@ export class SettingsManager {
               .setTooltip(t('Reset to default'))
               .onClick(() => {
                 const [, globalValue] = this.getSetting('board-notes-enable', local);
-                toggleComponent.setValue(globalValue !== undefined ? !!globalValue : true);
+                toggleComponent.setValue(globalValue !== undefined ? !!globalValue : false);
 
                 this.applySettingsUpdate({
                   $unset: ['board-notes-enable'],

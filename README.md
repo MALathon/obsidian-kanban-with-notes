@@ -44,13 +44,13 @@ These are my board notes! They support **full markdown**.
 
 ## Settings
 
-Find these in Settings → Kanban with Notes → Board Notes:
+**Note: Board notes are disabled by default.** To enable them, go to Settings → Kanban with Notes → Board Notes and toggle "Enable board notes" on.
 
-| Setting | Description |
-|---------|-------------|
-| Enable board notes | Toggle the feature on/off |
-| Collapse by default | Start with notes collapsed when opening a board |
-| Max height | Maximum height in pixels (0 = no limit) |
+| Setting | Description | Default |
+|---------|-------------|---------|
+| Enable board notes | Toggle the feature on/off | Off |
+| Collapse by default | Start with notes collapsed when opening a board | Off |
+| Max height | Maximum height in pixels (0 = no limit) | 200px |
 
 ## Installation
 
