@@ -278,6 +278,7 @@ const en = {
   // components/BoardNotes/BoardNotes.tsx
   Notes: 'Notes',
   'Add board notes': 'Add board notes',
+  'Edit notes': 'Edit notes',
   'Expand notes': 'Expand notes',
   'Collapse notes': 'Collapse notes',
   'Enter board notes...': 'Enter board notes...',
