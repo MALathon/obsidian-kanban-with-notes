@@ -90,6 +90,9 @@ export interface KanbanSettings {
   'tag-sort'?: TagSort[];
   'time-format'?: string;
   'time-trigger'?: string;
+  'board-notes-enable'?: boolean;
+  'board-notes-collapse'?: boolean;
+  'board-notes-max-height'?: number;
 }
 
 export interface KanbanViewSettings {
@@ -138,6 +141,9 @@ export const settingKeyLookup: Set<keyof KanbanSettings> = new Set([
   'tag-sort',
   'time-format',
   'time-trigger',
+  'board-notes-enable',
+  'board-notes-collapse',
+  'board-notes-max-height',
 ]);
 
 export type SettingRetriever = <K extends keyof KanbanSettings>(
@@ -469,6 +475,121 @@ export class SettingsManager {
           manager: this,
         })
       );
+
+    contentEl.createEl('h4', { text: t('Board Notes') });
+
+    new Setting(contentEl)
+      .setName(t('Enable board notes'))
+      .setDesc(t('Show a notes section at the top of the board for adding markdown notes above the columns.'))
+      .then((setting) => {
+        let toggleComponent: ToggleComponent;
+
+        setting
+          .addToggle((toggle) => {
+            toggleComponent = toggle;
+
+            const [value, globalValue] = this.getSetting('board-notes-enable', local);
+
+            if (value !== undefined) {
+              toggle.setValue(value as boolean);
+            } else if (globalValue !== undefined) {
+              toggle.setValue(globalValue as boolean);
+            } else {
+              toggle.setValue(true); // Default to enabled
+            }
+
+            toggle.onChange((newValue) => {
+              this.applySettingsUpdate({
+                'board-notes-enable': {
+                  $set: newValue,
+                },
+              });
+            });
+          })
+          .addExtraButton((b) => {
+            b.setIcon('lucide-rotate-ccw')
+              .setTooltip(t('Reset to default'))
+              .onClick(() => {
+                const [, globalValue] = this.getSetting('board-notes-enable', local);
+                toggleComponent.setValue(globalValue !== undefined ? !!globalValue : true);
+
+                this.applySettingsUpdate({
+                  $unset: ['board-notes-enable'],
+                });
+              });
+          });
+      });
+
+    new Setting(contentEl)
+      .setName(t('Collapse board notes by default'))
+      .setDesc(t('When enabled, board notes will be collapsed when opening a board.'))
+      .then((setting) => {
+        let toggleComponent: ToggleComponent;
+
+        setting
+          .addToggle((toggle) => {
+            toggleComponent = toggle;
+
+            const [value, globalValue] = this.getSetting('board-notes-collapse', local);
+
+            if (value !== undefined) {
+              toggle.setValue(value as boolean);
+            } else if (globalValue !== undefined) {
+              toggle.setValue(globalValue as boolean);
+            }
+
+            toggle.onChange((newValue) => {
+              this.applySettingsUpdate({
+                'board-notes-collapse': {
+                  $set: newValue,
+                },
+              });
+            });
+          })
+          .addExtraButton((b) => {
+            b.setIcon('lucide-rotate-ccw')
+              .setTooltip(t('Reset to default'))
+              .onClick(() => {
+                const [, globalValue] = this.getSetting('board-notes-collapse', local);
+                toggleComponent.setValue(!!globalValue);
+
+                this.applySettingsUpdate({
+                  $unset: ['board-notes-collapse'],
+                });
+              });
+          });
+      });
+
+    new Setting(contentEl)
+      .setName(t('Board notes max height'))
+      .setDesc(t('Maximum height of the board notes section in pixels. Set to 0 for no limit.'))
+      .addText((text) => {
+        const [value, globalValue] = this.getSetting('board-notes-max-height', local);
+
+        text.inputEl.setAttr('type', 'number');
+        text.inputEl.style.width = '100px';
+        text.setValue(String(value ?? globalValue ?? 200));
+        text.setPlaceholder('200');
+
+        text.onChange((val) => {
+          if (numberRegEx.test(val)) {
+            this.applySettingsUpdate({
+              'board-notes-max-height': {
+                $set: Number(val),
+              },
+            });
+          }
+        });
+      })
+      .addExtraButton((b) => {
+        b.setIcon('lucide-rotate-ccw')
+          .setTooltip(t('Reset to default'))
+          .onClick(() => {
+            this.applySettingsUpdate({
+              $unset: ['board-notes-max-height'],
+            });
+          });
+      });
 
     contentEl.createEl('h4', { text: t('Tags') });
 

@@ -1,11 +1,11 @@
 {
-	"id": "obsidian-kanban",
-	"name": "Kanban",
-	"version": "2.0.52",
+	"id": "kanban-with-notes",
+	"name": "Kanban with Notes",
+	"version": "1.0.0",
 	"minAppVersion": "1.0.0",
-	"description": "Create markdown-backed Kanban boards in Obsidian.",
-	"author": "mgmeyers",
-	"authorUrl": "https://github.com/mgmeyers/obsidian-kanban",
-	"helpUrl": "https://publish.obsidian.md/kanban/Obsidian+Kanban+Plugin",
+	"description": "Create markdown-backed Kanban boards with inline board notes. Fork of obsidian-kanban by mgmeyers.",
+	"author": "Mark Lifson",
+	"authorUrl": "https://github.com/MALathon",
+	"helpUrl": "https://github.com/MALathon/obsidian-kanban-with-notes",
 	"isDesktopOnly": false
 }
