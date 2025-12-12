@@ -54,6 +54,10 @@ export function BoardNotes({ notes }: BoardNotesProps) {
     setEditState({ x: e.clientX, y: e.clientY } as EditCoordinates);
   }, []);
 
+  const onEditClick = useCallback(() => {
+    setEditState({ x: 0, y: 0 } as EditCoordinates);
+  }, []);
+
   const toggleCollapse = useCallback(() => {
     setIsCollapsed((prev) => !prev);
   }, []);
@@ -99,6 +103,15 @@ export function BoardNotes({ notes }: BoardNotesProps) {
           <Icon name={isCollapsed ? 'lucide-chevron-right' : 'lucide-chevron-down'} />
         </button>
         <span className={c('board-notes-title')}>{t('Notes')}</span>
+        {!isCollapsed && !isEditing(editState) && (
+          <button
+            className={c('board-notes-edit-button')}
+            onClick={onEditClick}
+            aria-label={t('Edit notes')}
+          >
+            <Icon name="lucide-pencil" />
+          </button>
+        )}
       </div>
       {!isCollapsed && (
         <div className={c('board-notes-content')}>
