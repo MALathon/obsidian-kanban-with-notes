@@ -1,22 +1,83 @@
-# Obsidian Kanban Plugin
+# Kanban with Notes
 
-Create markdown-backed Kanban boards in [Obsidian](https://obsidian.md/)
+A fork of [obsidian-kanban](https://github.com/mgmeyers/obsidian-kanban) by mgmeyers with **inline board notes** support.
 
-- [Bugs, Issues, & Feature Requests](https://github.com/mgmeyers/obsidian-kanban/issues)
-- [Development Roadmap](https://github.com/mgmeyers/obsidian-kanban/projects/1)
+Create markdown-backed Kanban boards in [Obsidian](https://obsidian.md/) with a dedicated notes section at the top of each board.
 
-![Screen Shot 2021-09-16 at 12.58.22 PM.png](https://github.com/mgmeyers/obsidian-kanban/blob/main/docs/Assets/Screen%20Shot%202021-09-16%20at%2012.58.22%20PM.png)
+## New Feature: Board Notes
 
-![Screen Shot 2021-09-16 at 1.10.38 PM.png](https://github.com/mgmeyers/obsidian-kanban/blob/main/docs/Assets/Screen%20Shot%202021-09-16%20at%201.10.38%20PM.png)
+Add notes directly to your Kanban board that appear above the columns. Perfect for:
+- Project descriptions and goals
+- Quick reference information
+- Task checklists (compatible with Tasks plugin)
+- Links to related notes
 
-## Documentation
+### How it works
 
-Find the plugin documentation here: [Obsidian Kanban Plugin Documentation](https://publish.obsidian.md/kanban/)
+Content placed before the first `## Heading` in your Kanban markdown file is rendered as board notes:
 
-## Support
+```markdown
+---
+kanban-plugin: basic
+---
 
-If you find this plugin useful and would like to support its development, you can sponsor [me](https://github.com/mgmeyers) on Github, or buy me a coffee.
+These are my board notes! They support **full markdown**.
+
+- [ ] Checklist item 1
+- [ ] Checklist item 2
+
+## Backlog
+
+- [ ] Task 1
+
+## In Progress
+
+- [ ] Task 2
+```
+
+### Features
+
+- **Collapsible** - Click the chevron to collapse/expand notes
+- **Edit button** - Click the pencil icon to edit (or double-click the notes area)
+- **Scrollable** - Long notes scroll within a configurable max height
+- **Full markdown** - Supports formatting, links, embeds, checklists, etc.
+
+## Settings
+
+Find these in Settings → Kanban with Notes → Board Notes:
+
+| Setting | Description |
+|---------|-------------|
+| Enable board notes | Toggle the feature on/off |
+| Collapse by default | Start with notes collapsed when opening a board |
+| Max height | Maximum height in pixels (0 = no limit) |
+
+## Installation
+
+### Via BRAT (recommended for beta testing)
+
+1. Install [BRAT](https://github.com/TfTHacker/obsidian42-brat) from Community Plugins
+2. Open BRAT settings → Add Beta Plugin
+3. Enter: `MALathon/obsidian-kanban-with-notes`
+4. Enable the plugin
+
+### Manual Installation
+
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](https://github.com/MALathon/obsidian-kanban-with-notes/releases)
+2. Create folder: `<your-vault>/.obsidian/plugins/kanban-with-notes/`
+3. Copy the files into that folder
+4. Reload Obsidian and enable the plugin
+
+## Credits
+
+This plugin is a fork of [obsidian-kanban](https://github.com/mgmeyers/obsidian-kanban) by [mgmeyers](https://github.com/mgmeyers). All credit for the core Kanban functionality goes to the original author.
+
+### Original Plugin Support
+
+If you find the core Kanban functionality useful, please consider supporting the original author:
 
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/mgmeyers?label=Sponsor&logo=GitHub%20Sponsors&style=for-the-badge)](https://github.com/sponsors/mgmeyers)
 
-<a href="https://www.buymeacoffee.com/mgme"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=mgme&button_colour=5F7FFF&font_colour=ffffff&font_family=Lato&outline_colour=000000&coffee_colour=FFDD00"></a>
+## License
+
+MIT - See [LICENSE](LICENSE) for details.
