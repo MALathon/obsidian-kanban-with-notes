@@ -29,8 +29,8 @@ jobs:
       - name: Download and install Obsidian for macOS
         run: |
           mkdir -p test-automation
-          # Download macOS universal DMG
-          curl -L "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.10.6/Obsidian-1.10.6-universal.dmg" -o test-automation/Obsidian.dmg
+          # Download macOS DMG
+          curl -L "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.10.6/Obsidian-1.10.6.dmg" -o test-automation/Obsidian.dmg
           # Mount the DMG
           hdiutil attach test-automation/Obsidian.dmg -nobrowse -mountpoint test-automation/obsidian-mount
           # Copy the app bundle
