@@ -2,8 +2,7 @@
 kanban-plugin: board
 ---
 
-## 🚀 Website Redesign Project
-
+**Project:** Website Redesign
 **Goal:** Launch new responsive design by Q2 2024
 
 **Key Resources:**
@@ -12,9 +11,9 @@ kanban-plugin: board
 - [Staging Site](https://staging.example.com)
 
 **Current Status:**
-- ✅ Design phase complete
-- 🟡 Development 60% done
-- ⏳ Waiting on content team
+- Design phase complete
+- Development 60% done
+- Waiting on content team
 
 **Blockers:**
 - [ ] Need final logo approval from marketing
