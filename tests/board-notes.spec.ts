@@ -37,7 +37,15 @@ test.beforeAll(async () => {
   console.log(`Launching Obsidian from: ${obsidianPath}`);
   console.log(`Vault path: ${VAULT_PATH}`);
 
+  // Check if executable exists
+  const fs = require('fs');
+  if (!fs.existsSync(obsidianPath)) {
+    throw new Error(`Obsidian executable not found at: ${obsidianPath}`);
+  }
+  console.log('✓ Obsidian executable exists');
+
   // Launch Electron with Obsidian
+  console.log('Attempting to launch Electron...');
   electronApp = await electron.launch({
     executablePath: obsidianPath,
     args: ['--no-sandbox', '--disable-gpu', VAULT_PATH],
@@ -47,6 +55,7 @@ test.beforeAll(async () => {
     },
     timeout: 120000, // Increase timeout to 2 minutes
   });
+  console.log('✓ Electron launched successfully!');
 
   console.log('Obsidian process launched, waiting for window...');
 
