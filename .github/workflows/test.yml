@@ -1,0 +1,59 @@
+name: Test
+
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build plugin
+        run: npm run build
+
+      - name: Generate Obsidian cache key
+        run: npm run test:e2e -- --info
+
+      - name: Cache Obsidian binaries
+        uses: actions/cache@v4
+        with:
+          path: .obsidian-cache
+          key: obsidian-${{ hashFiles('.obsidian-cache/cache-key.txt') }}
+
+      - name: Setup virtual display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb herbstluftwm
+          export DISPLAY=:99
+          Xvfb :99 -screen 0 1280x1024x24 &
+          herbstluftwm &
+
+      - name: Run E2E tests
+        run: npm run test:e2e
+        env:
+          DISPLAY: :99
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: wdio-test-results
+          path: wdio-logs/
+          retention-days: 7

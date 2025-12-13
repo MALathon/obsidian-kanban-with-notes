@@ -1,7 +1,5 @@
 ---
-
 kanban-plugin: board
-
 ---
 
 This is a test board with notes content before the columns.
@@ -19,9 +17,3 @@ This should appear in the board notes section when enabled.
 ## Done
 
 - [x] Completed task
-
-%% kanban:settings
-```
-{"kanban-plugin":"board"}
-```
-%%

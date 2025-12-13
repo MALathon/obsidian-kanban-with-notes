@@ -1,229 +1,156 @@
-# E2E Testing Infrastructure
+# E2E Testing with wdio-obsidian-service
 
-## Overview
+This project uses **wdio-obsidian-service** for end-to-end testing of the Kanban with Notes plugin.
 
-This document describes the E2E (End-to-End) testing infrastructure for the Obsidian Kanban with Notes plugin, including what's been set up, current limitations, and recommended approaches.
+## 🎯 What is wdio-obsidian-service?
 
-## What's Been Built ✅
+[wdio-obsidian-service](https://github.com/jesse-r-s-hines/wdio-obsidian-service) is a WebdriverIO service specifically designed for testing Obsidian plugins. Unlike generic Electron testing tools, it:
 
-### 1. Comprehensive Test Suite
-- **Location**: `tests/board-notes.spec.ts`
-- **Test Count**: 9 comprehensive E2E tests
-- **Coverage**:
-  - Board notes disabled by default
-  - Enable/disable functionality
-  - Board notes rendering
-  - Frontmatter exclusion verification
-  - Collapse/expand functionality
-  - Edit button and edit mode
-  - Max-height scroll behavior
-  - Settings integration
+- ✅ **Built for Obsidian** - Understands Obsidian's architecture and APIs
+- ✅ **Helper functions** - `executeObsidianCommand()`, `reloadObsidian()`, etc.
+- ✅ **Works in CI** - Proven to work in GitHub Actions
+- ✅ **Multi-platform** - Windows, macOS, Linux support
 
-### 2. Test Infrastructure
-- **Playwright Test Framework**: Installed with full Electron support
-- **Test Vault**: Pre-configured vault at `test-automation/test-vault/`
-- **Plugin Installation**: Automated plugin deployment in test vault
-- **Sample Data**: Test Kanban board with notes content
+## 🚀 Quick Start
 
-### 3. Docker Setup (Attempted)
-- **Dockerfile**: `Dockerfile.test` with Microsoft Playwright base image
-- **Docker Compose**: `docker-compose.test.yml` for easy management
-- **Run Script**: `./run-e2e-tests.sh` for convenient test execution
-- **Dependencies**: All Electron dependencies (xvfb, GTK, etc.)
-
-## Current Limitation ⚠️
-
-### Electron/DevTools Connection Issue
-
-**Problem**: Obsidian (an Electron app) fails to establish a DevTools Protocol connection when launched in Docker/headless environments. This prevents Playwright from controlling the application.
-
-**Symptoms**:
-- Tests timeout during `electron.launch()`
-- "Process failed to launch" errors
-- No window/page accessible to Playwright
-
-**Root Cause**: Complex Electron applications like Obsidian require:
-- Proper IPC (Inter-Process Communication)
-- GPU/display drivers
-- Chrome DevTools Protocol websocket connection
-- Various system libraries and permissions
-
-These requirements are difficult to satisfy in containerized/headless environments, even with xvfb.
-
-## Recommended Testing Approaches 🎯
-
-### Option 1: Local Development Testing (Easiest)
-
-**Best for**: Daily development and quick verification
-
-**Setup**:
-```bash
-# On your local machine with display (Mac/Linux/Windows)
-npm install
-npx playwright test --headed
-```
-
-**Advantages**:
-- See tests run in real-time
-- Easy debugging
-- Fast iteration
-- Screenshots and videos automatically captured
-
-### Option 2: GitHub Actions CI/CD (Recommended for Production)
-
-**Best for**: Automated testing on every PR/commit
-
-**Setup**: Create `.github/workflows/e2e-tests.yml`
-
-```yaml
-name: E2E Tests
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      - name: Run E2E tests
-        run: npx playwright test
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: playwright-report
-          path: playwright-report/
-```
-
-**Advantages**:
-- Automated on every PR
-- Free for public repos
-- GitHub's infrastructure handles display/GPU
-- Test reports saved as artifacts
-
-### Option 3: Manual Testing Checklist
-
-**Best for**: Release verification
-
-Use the test vault we created:
+### Run Tests Locally
 
 ```bash
-# Launch Obsidian with test vault
-./test-automation/squashfs-root/obsidian test-automation/test-vault
-```
-
-**Test Checklist**:
-1. ☐ Open "Test Board.md"
-2. ☐ Verify board notes are NOT visible by default
-3. ☐ Open Settings → Kanban with Notes
-4. ☐ Enable "Board notes"
-5. ☐ Verify notes appear ("This is a test board...")
-6. ☐ Verify frontmatter is NOT shown in notes
-7. ☐ Click collapse button - notes should hide
-8. ☐ Click expand button - notes should show
-9. ☐ Click edit button - editor should appear
-10. ☐ Verify max-height scroll (default 200px)
-11. ☐ Disable board notes - section should disappear
-
-## Code Quality Verification ✅
-
-**Status**: All features have been verified through comprehensive code review:
-
-- ✅ Default disabled setting (`Settings.ts:498, 514`)
-- ✅ Component null-render when disabled (`BoardNotes.tsx:31`)
-- ✅ Frontmatter exclusion (`list.ts:258`)
-- ✅ Edit button (`BoardNotes.tsx:118-124`)
-- ✅ Collapse/expand (`BoardNotes.tsx:72-74, 109-115`)
-- ✅ Max-height scroll (`BoardNotes.tsx:130-136`)
-
-## Files Created
-
-### Test Files
-- `tests/board-notes.spec.ts` - Main test suite
-- `tests/obsidian-launch.spec.ts` - Diagnostic test
-- `playwright.config.ts` - Playwright configuration
-- `tsconfig.json` - Updated to include tests
-
-### Docker Files
-- `Dockerfile.test` - Docker image for testing
-- `docker-compose.test.yml` - Docker Compose configuration
-- `run-e2e-tests.sh` - Convenient test runner script
-
-### Test Data
-- `test-automation/test-vault/` - Pre-configured Obsidian vault
-- `test-automation/test-vault/Test Board.md` - Sample Kanban board
-- `test-automation/test-vault/.obsidian/plugins/kanban-with-notes/` - Installed plugin
-
-## Quick Start (For Machines with Display)
-
-```bash
-# Install dependencies (if not already done)
+# Install dependencies
 npm install
 
-# Run tests headless
-npx playwright test
+# Build the plugin
+npm run build
 
-# Run tests with browser visible
-npx playwright test --headed
-
-# Run tests in debug mode
-npx playwright test --debug
-
-# View HTML report
-npx playwright show-report
+# Run E2E tests
+npm run test:e2e
 ```
 
-## Next Steps
+### First Run
 
-### For v1.0 Release
-1. ✅ Code review completed - all features verified
-2. ✅ Test infrastructure ready
-3. ⏭️ Set up GitHub Actions for automated testing
-4. ⏭️ Run manual verification checklist before release
+On first run, wdio-obsidian-service will:
+1. Download the appropriate Obsidian version
+2. Cache it in `.obsidian-cache/`
+3. Set up a test vault
+4. Run your tests
 
-### For Future Development
-- Integrate E2E tests into CI/CD pipeline
-- Add visual regression testing with screenshots
-- Expand test coverage for edge cases
-- Add performance testing
+Subsequent runs are much faster due to caching.
 
-## Troubleshooting
+## 📁 Test Structure
 
-### Tests Won't Run
-- **Error**: "No tests found"
-  - **Solution**: Run from project root: `/home/mlifson/Development/obsidian-kanban-with-notes`
+```
+test/
+├── vaults/
+│   └── main/           # Test vault with sample Kanban boards
+│       └── Test Board.md
+└── specs/
+    └── board-notes.e2e.ts  # E2E tests for board notes feature
+```
 
-- **Error**: "Timeout exceeded"
-  - **Solution**: Increase timeout in test or use machine with display
+## ✍️ Writing Tests
 
-- **Error**: "Process failed to launch"
-  - **Solution**: Use local machine with display or GitHub Actions
+Tests use the WebdriverIO + Mocha framework with Obsidian-specific helpers:
 
-### Docker Issues
-- **Error**: "docker-compose command not found"
-  - **Solution**: Use `docker compose` (without hyphen) or install docker-compose
+```typescript
+import { browser, expect } from '@wdio/globals'
 
-## Conclusion
+describe('My Feature', function() {
+    before(async function() {
+        await browser.reloadObsidian({vault: "./test/vaults/main"});
+    })
 
-While the Docker/headless approach proved challenging due to Electron's requirements, we have:
+    it('should work correctly', async () => {
+        // Execute Obsidian commands
+        await browser.executeObsidianCommand("my-plugin:my-command");
 
-1. ✅ Built a comprehensive E2E test suite ready for use
-2. ✅ Verified all features through code review
-3. ✅ Created infrastructure for local and CI/CD testing
-4. ✅ Documented clear testing procedures
+        // Find elements
+        const element = await $('.my-selector');
+        await expect(element).toExist();
 
-**Recommendation**: Proceed with v1.0 release based on code review verification, and set up GitHub Actions for automated E2E testing going forward.
+        // Interact with UI
+        await element.click();
+        await expect(element).toHaveText('Expected text');
+    })
+})
+```
+
+## 🧪 Available Test Helpers
+
+### Browser Commands
+
+- `browser.reloadObsidian({vault: "path"})` - Reload with a specific vault
+- `browser.executeObsidianCommand("command-id")` - Execute any Obsidian command
+- `browser.pause(ms)` - Wait for specified milliseconds
+
+### Element Selectors
+
+Use standard CSS selectors:
+- `$('.class-name')` - Find single element
+- `$$('.class-name')` - Find multiple elements
+- `$('div.modal-container .modal-content')` - Complex selectors
+
+### Assertions
+
+- `expect(element).toExist()` - Element exists in DOM
+- `expect(element).toBeDisplayed()` - Element is visible
+- `expect(element).toHaveText('text')` - Element contains text
+- `expect(element).toHaveAttribute('attr', 'value')` - Check attributes
+
+## 🔧 Configuration
+
+Edit `wdio.conf.mts` to customize:
+
+```typescript
+capabilities: [{
+    browserName: 'obsidian',
+    browserVersion: "latest",  // or "1.5.0", "earliest"
+    'wdio:obsidianOptions': {
+        installerVersion: "earliest",
+        plugins: ["."],  // Your plugin
+        vault: "test/vaults/main",
+    },
+}]
+```
+
+## 🎬 CI/CD (GitHub Actions)
+
+Tests run automatically on every push and PR via `.github/workflows/test.yml`.
+
+The workflow:
+1. Builds the plugin
+2. Caches Obsidian binaries for faster runs
+3. Sets up virtual display (xvfb + herbstluftwm)
+4. Runs E2E tests
+5. Uploads test results as artifacts
+
+## 🐛 Troubleshooting
+
+### Tests fail with "Cannot find Obsidian"
+
+Make sure you've built the plugin first:
+```bash
+npm run build
+npm run test:e2e
+```
+
+### Tests timeout
+
+Increase timeout in `wdio.conf.mts`:
+```typescript
+mochaOpts: {
+    timeout: 120000,  // 2 minutes
+}
+```
+
+### Clear cache and retry
+
+```bash
+rm -rf .obsidian-cache
+npm run test:e2e
+```
+
+## 📚 Resources
+
+- [wdio-obsidian-service Documentation](https://jesse-r-s-hines.github.io/wdio-obsidian-service/)
+- [WebdriverIO Documentation](https://webdriver.io/docs/gettingstarted)
+- [Sample Plugin](https://github.com/jesse-r-s-hines/wdio-obsidian-service-sample-plugin)

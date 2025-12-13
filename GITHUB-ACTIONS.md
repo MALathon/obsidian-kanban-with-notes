@@ -77,12 +77,11 @@ Every time you push code:
    - ✅ All required files generated (main.js, styles.css, manifest.json)
    - ✅ File sizes are reasonable
 
-2. **E2E Tests** (Run Locally)
-   - ⚠️ E2E tests are **not** run in CI (Electron/Playwright limitations in GitHub Actions)
-   - ✅ Run locally with `npx playwright test` before committing
-   - See E2E-TESTING.md for local testing instructions
-
-**Important**: Always run E2E tests locally before pushing changes!
+2. **E2E Tests**
+   - ✅ Tests run automatically in CI using **wdio-obsidian-service**
+   - ✅ Tests board notes feature comprehensively
+   - ✅ Can also run locally with `npm run test:e2e`
+   - See E2E-TESTING.md for details
 
 ## 💰 Cost
 
