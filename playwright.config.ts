@@ -9,7 +9,7 @@ export default defineConfig({
   },
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
+  retries: 0, // Disabled retries to see errors faster
   workers: 1,
   reporter: 'html',
   use: {
