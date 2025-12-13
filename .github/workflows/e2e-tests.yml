@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest  # macOS works better for Electron + Playwright
     timeout-minutes: 10
 
     steps:
@@ -26,21 +26,21 @@ jobs:
       - name: Build plugin
         run: npm run build
 
-      - name: Download Obsidian AppImage
+      - name: Download and install Obsidian for macOS
         run: |
           mkdir -p test-automation
-          curl -L "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.10.6/Obsidian-1.10.6.AppImage" -o test-automation/Obsidian.AppImage
-          chmod +x test-automation/Obsidian.AppImage
-          echo "✅ Obsidian AppImage downloaded"
+          # Download macOS universal DMG
+          curl -L "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.10.6/Obsidian-1.10.6-universal.dmg" -o test-automation/Obsidian.dmg
+          # Mount the DMG
+          hdiutil attach test-automation/Obsidian.dmg -nobrowse -mountpoint test-automation/obsidian-mount
+          # Copy the app bundle
+          cp -R test-automation/obsidian-mount/Obsidian.app test-automation/
+          # Unmount the DMG
+          hdiutil detach test-automation/obsidian-mount
+          echo "✅ Obsidian installed"
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-
-      - name: Install xvfb for headless display
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb
-          echo "✅ xvfb installed"
 
       - name: Setup test vault
         run: |
@@ -48,11 +48,9 @@ jobs:
           cp main.js manifest.json styles.css test-automation/test-vault/.obsidian/plugins/kanban-with-notes/
 
       - name: Run E2E tests
-        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x720x24" npx playwright test --reporter=list
+        run: npx playwright test --reporter=list
         env:
           CI: true
-          DISPLAY: :99
-          DEBUG: pw:api
 
       - name: Upload test results
         if: always()

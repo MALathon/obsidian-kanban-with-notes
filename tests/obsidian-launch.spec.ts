@@ -5,8 +5,14 @@ import { ElectronApplication } from 'playwright';
 test.describe('Obsidian Launch Test', () => {
   test('should launch Obsidian successfully', async () => {
     const VAULT_PATH = path.resolve(__dirname, '../test-automation/test-vault');
-    const obsidianPath = path.resolve(__dirname, '../test-automation/squashfs-root/obsidian');
+    // macOS: Obsidian.app/Contents/MacOS/Obsidian
+    // Linux: squashfs-root/obsidian
+    const isMac = process.platform === 'darwin';
+    const obsidianPath = isMac
+      ? path.resolve(__dirname, '../test-automation/Obsidian.app/Contents/MacOS/Obsidian')
+      : path.resolve(__dirname, '../test-automation/squashfs-root/obsidian');
 
+    console.log(`Platform: ${process.platform}`);
     console.log(`Launching Obsidian from: ${obsidianPath}`);
     console.log(`Vault path: ${VAULT_PATH}`);
 

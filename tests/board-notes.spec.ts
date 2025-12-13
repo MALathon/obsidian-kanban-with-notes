@@ -6,26 +6,34 @@ let electronApp: ElectronApplication;
 let page: Page;
 
 const VAULT_PATH = path.resolve(__dirname, '../test-automation/test-vault');
-const APPIMAGE_PATH = path.resolve(__dirname, '../test-automation/Obsidian.AppImage');
 
 test.beforeAll(async () => {
-  // Extract AppImage to get the actual Electron executable
   const { execSync } = require('child_process');
 
-  // AppImages can be extracted using --appimage-extract
-  // This creates a squashfs-root directory with the app contents
-  const extractDir = path.resolve(__dirname, '../test-automation/obsidian-extracted');
+  // Determine platform and set executable path
+  const isMac = process.platform === 'darwin';
+  let obsidianPath: string;
 
-  try {
-    execSync(`cd ${path.dirname(APPIMAGE_PATH)} && ${APPIMAGE_PATH} --appimage-extract > /dev/null 2>&1`, {
-      timeout: 30000
-    });
-    console.log('AppImage extracted successfully');
-  } catch (error) {
-    console.log('AppImage extraction attempt completed');
+  if (isMac) {
+    // macOS: Use .app bundle
+    obsidianPath = path.resolve(__dirname, '../test-automation/Obsidian.app/Contents/MacOS/Obsidian');
+  } else {
+    // Linux: Extract AppImage
+    const APPIMAGE_PATH = path.resolve(__dirname, '../test-automation/Obsidian.AppImage');
+
+    try {
+      execSync(`cd ${path.dirname(APPIMAGE_PATH)} && ${APPIMAGE_PATH} --appimage-extract > /dev/null 2>&1`, {
+        timeout: 30000
+      });
+      console.log('AppImage extracted successfully');
+    } catch (error) {
+      console.log('AppImage extraction attempt completed');
+    }
+
+    obsidianPath = path.resolve(path.dirname(APPIMAGE_PATH), 'squashfs-root/obsidian');
   }
 
-  const obsidianPath = path.resolve(path.dirname(APPIMAGE_PATH), 'squashfs-root/obsidian');
+  console.log(`Platform: ${process.platform}`);
   console.log(`Launching Obsidian from: ${obsidianPath}`);
   console.log(`Vault path: ${VAULT_PATH}`);
 
