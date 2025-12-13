@@ -36,15 +36,22 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
 
+      - name: Install xvfb for headless display
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          echo "✅ xvfb installed"
+
       - name: Setup test vault
         run: |
           mkdir -p test-automation/test-vault/.obsidian/plugins/kanban-with-notes
           cp main.js manifest.json styles.css test-automation/test-vault/.obsidian/plugins/kanban-with-notes/
 
       - name: Run E2E tests
-        run: npx playwright test
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x720x24" npx playwright test
         env:
           CI: true
+          DISPLAY: :99
 
       - name: Upload test results
         if: always()
