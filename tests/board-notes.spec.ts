@@ -48,28 +48,29 @@ test.beforeAll(async () => {
   console.log('Attempting to launch Electron...');
   electronApp = await electron.launch({
     executablePath: obsidianPath,
-    args: ['--no-sandbox', '--disable-gpu', VAULT_PATH],
+    args: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage', VAULT_PATH],
     env: {
       ...process.env,
-      OBSIDIAN_DISABLE_GPU: '1', // Disable GPU for headless testing
+      OBSIDIAN_DISABLE_GPU: '1',
+      ELECTRON_ENABLE_LOGGING: '1',
     },
-    timeout: 120000, // Increase timeout to 2 minutes
+    timeout: 300000, // 5 minutes for CI environment
   });
   console.log('✓ Electron launched successfully!');
 
   console.log('Obsidian process launched, waiting for window...');
 
   // Wait for the first window (with increased timeout)
-  page = await electronApp.firstWindow({ timeout: 60000 });
+  page = await electronApp.firstWindow({ timeout: 120000 });
   console.log('Window detected, waiting for DOM to load...');
 
-  await page.waitForLoadState('domcontentloaded', { timeout: 60000 });
+  await page.waitForLoadState('domcontentloaded', { timeout: 120000 });
   console.log('DOM loaded, waiting for Obsidian initialization...');
 
   // Wait for Obsidian to fully load (increase timeout for plugin loading)
-  await page.waitForTimeout(10000);
+  await page.waitForTimeout(15000);
   console.log('Obsidian should be fully loaded now');
-}, 180000); // Set beforeAll timeout to 3 minutes
+}, 600000); // Set beforeAll timeout to 10 minutes for CI
 
 test.afterAll(async () => {
   await electronApp?.close();

@@ -8,8 +8,8 @@ on:
 
 jobs:
   test:
-    runs-on: macos-latest  # macOS works better for Electron + Playwright
-    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
@@ -26,20 +26,18 @@ jobs:
       - name: Build plugin
         run: npm run build
 
-      - name: Download and install Obsidian for macOS
+      - name: Download Obsidian AppImage
         run: |
           mkdir -p test-automation
-          # Download macOS DMG
-          curl -L "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.10.6/Obsidian-1.10.6.dmg" -o test-automation/Obsidian.dmg
-          # Mount the DMG
-          hdiutil attach test-automation/Obsidian.dmg -nobrowse -mountpoint test-automation/obsidian-mount
-          # Copy the app bundle
-          cp -R test-automation/obsidian-mount/Obsidian.app test-automation/
-          # Unmount the DMG
-          hdiutil detach test-automation/obsidian-mount
-          # Remove quarantine attribute to allow app to run in automation
-          xattr -cr test-automation/Obsidian.app
-          echo "✅ Obsidian installed and quarantine removed"
+          curl -L "https://github.com/obsidianmd/obsidian-releases/releases/download/v1.10.6/Obsidian-1.10.6.AppImage" -o test-automation/Obsidian.AppImage
+          chmod +x test-automation/Obsidian.AppImage
+          echo "✅ Obsidian AppImage downloaded"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 libdrm2 libgbm1 libasound2
+          echo "✅ System dependencies installed"
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
@@ -50,9 +48,10 @@ jobs:
           cp main.js manifest.json styles.css test-automation/test-vault/.obsidian/plugins/kanban-with-notes/
 
       - name: Run E2E tests
-        run: npx playwright test --reporter=list
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" npx playwright test --reporter=list
         env:
           CI: true
+          DISPLAY: :99
 
       - name: Upload test results
         if: always()

@@ -27,8 +27,9 @@ test.describe('Obsidian Launch Test', () => {
           ...process.env,
           NODE_ENV: 'test',
           OBSIDIAN_DISABLE_GPU: '1',
+          ELECTRON_ENABLE_LOGGING: '1',
         },
-        timeout: 120000, // Increased to 2 minutes for CI environments
+        timeout: 300000, // 5 minutes for CI environment
       });
 
       console.log('Obsidian launched successfully!');
