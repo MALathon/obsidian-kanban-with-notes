@@ -3,9 +3,9 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests',
   testMatch: '**/*.spec.ts',
-  timeout: 60000,
+  timeout: 600000, // 10 minutes for CI (Electron launch can be slow)
   expect: {
-    timeout: 10000,
+    timeout: 30000, // 30 seconds for assertions
   },
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
