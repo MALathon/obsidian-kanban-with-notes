@@ -73,21 +73,16 @@ git push origin my-feature
 Every time you push code:
 
 1. **Build Verification**
-   - ✅ TypeScript type checking
    - ✅ Plugin compiles without errors
    - ✅ All required files generated (main.js, styles.css, manifest.json)
    - ✅ File sizes are reasonable
 
-2. **E2E Tests** (9 tests)
-   - ✅ Board notes disabled by default
-   - ✅ Enable/disable functionality
-   - ✅ Board notes render correctly
-   - ✅ Frontmatter not shown in notes
-   - ✅ Collapse/expand buttons work
-   - ✅ Edit button appears
-   - ✅ Edit mode with save/cancel
-   - ✅ Max-height scroll behavior
-   - ✅ Settings integration
+2. **E2E Tests** (Run Locally)
+   - ⚠️ E2E tests are **not** run in CI (Electron/Playwright limitations in GitHub Actions)
+   - ✅ Run locally with `npx playwright test` before committing
+   - See E2E-TESTING.md for local testing instructions
+
+**Important**: Always run E2E tests locally before pushing changes!
 
 ## 💰 Cost
 

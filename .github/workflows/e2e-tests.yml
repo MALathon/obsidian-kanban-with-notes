@@ -1,10 +1,11 @@
-name: E2E Tests
+name: E2E Tests (Local Only)
+
+# E2E tests are disabled in CI due to Electron/Playwright limitations
+# Run tests locally with: npx playwright test
+# See E2E-TESTING.md for details
 
 on:
-  push:
-    branches: [ '**' ]  # Run on all branches
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:  # Manual trigger only
 
 jobs:
   test:
