@@ -48,10 +48,11 @@ jobs:
           cp main.js manifest.json styles.css test-automation/test-vault/.obsidian/plugins/kanban-with-notes/
 
       - name: Run E2E tests
-        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x720x24" npx playwright test
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1280x720x24" npx playwright test --reporter=list
         env:
           CI: true
           DISPLAY: :99
+          DEBUG: pw:api
 
       - name: Upload test results
         if: always()
