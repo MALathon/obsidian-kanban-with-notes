@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  playwright-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: obsidian-kanban-tests
+    volumes:
+      # Mount test results directory to get screenshots and reports
+      - ./test-results:/app/test-results
+      - ./playwright-report:/app/playwright-report
+    environment:
+      - ELECTRON_DISABLE_SANDBOX=1
+      - DISPLAY=:99
+      - NODE_ENV=test
+    # Increase shared memory size for Chromium
+    shm_size: '2gb'
+    # Add capabilities needed for sandboxing
+    cap_add:
+      - SYS_ADMIN
+    # Security options for Chrome/Electron
+    security_opt:
+      - seccomp:unconfined

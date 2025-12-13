@@ -1,0 +1,27 @@
+{
+  "theme": "obsidian",
+  "cssTheme": "",
+  "baseFontSize": 16,
+  "showLineNumber": false,
+  "showIndentGuide": true,
+  "nativeMenus": true,
+  "showInlineTitle": true,
+  "showViewHeader": true,
+  "showFrontmatter": false,
+  "showUnsupportedFiles": false,
+  "attachmentFolderPath": "/",
+  "promptDelete": false,
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "shortest",
+  "useMarkdownLinks": false,
+  "newFileLocation": "root",
+  "foldHeading": true,
+  "foldIndent": true,
+  "defaultViewMode": "source",
+  "pdfExportSettings": {
+    "pageSize": "Letter",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  }
+}

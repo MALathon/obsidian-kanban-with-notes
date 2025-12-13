@@ -12,6 +12,16 @@ package-lock.json
 .env
 yarn*
 dist
-test-vault/
+/test-vault/
 main.js
 styles.css
+
+# E2E testing artifacts
+test-results/
+playwright-report/
+test-output.log
+logs/
+
+# Test automation (keep test files, exclude generated artifacts)
+test-automation/squashfs-root/
+test-automation/Obsidian.AppImage

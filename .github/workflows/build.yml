@@ -1,0 +1,68 @@
+name: Build Plugin
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run TypeScript type checking
+        run: npm run typecheck
+
+      - name: Build plugin
+        run: npm run build
+
+      - name: Verify build outputs
+        run: |
+          if [ ! -f "main.js" ]; then
+            echo "Error: main.js not found"
+            exit 1
+          fi
+          if [ ! -f "styles.css" ]; then
+            echo "Error: styles.css not found"
+            exit 1
+          fi
+          if [ ! -f "manifest.json" ]; then
+            echo "Error: manifest.json not found"
+            exit 1
+          fi
+          echo "✅ All build outputs verified"
+
+      - name: Check file sizes
+        run: |
+          echo "Build output sizes:"
+          ls -lh main.js styles.css manifest.json
+
+          # Warn if main.js is unusually large (>2MB)
+          SIZE=$(stat -f%z main.js 2>/dev/null || stat -c%s main.js)
+          if [ $SIZE -gt 2097152 ]; then
+            echo "⚠️ Warning: main.js is larger than 2MB ($SIZE bytes)"
+          fi
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin-build
+          path: |
+            main.js
+            styles.css
+            manifest.json
+          retention-days: 7
