@@ -9,7 +9,7 @@ Enhanced fork of [obsidian-kanban](https://github.com/mgmeyers/obsidian-kanban) 
 
 ## Board Notes in Action
 
-![Board with Notes](docs/board-with-notes-crop.png)
+![Board with Notes](docs/board-with-notes.png)
 *Add project context, goals, checklists, and links directly above your Kanban columns*
 
 ---

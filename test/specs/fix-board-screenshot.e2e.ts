@@ -18,6 +18,12 @@ describe('Fix Board Screenshot', function() {
         });
         await browser.pause(1000);
 
+        // Hide left sidebar for cleaner screenshot
+        await browser.execute(async () => {
+            app.workspace.leftSplit.collapse();
+        });
+        await browser.pause(500);
+
         // Open Demo Board
         await browser.execute(async () => {
             const file = app.vault.getAbstractFileByPath("Demo Board.md");
