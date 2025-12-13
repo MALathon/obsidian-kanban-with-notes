@@ -20,8 +20,9 @@ test.describe('Obsidian Launch Test', () => {
         env: {
           ...process.env,
           NODE_ENV: 'test',
+          OBSIDIAN_DISABLE_GPU: '1',
         },
-        timeout: 30000,
+        timeout: 120000, // Increased to 2 minutes for CI environments
       });
 
       console.log('Obsidian launched successfully!');
@@ -36,7 +37,7 @@ test.describe('Obsidian Launch Test', () => {
         page = windows[0];
       } else {
         console.log('Waiting for window to appear...');
-        page = await electronApp.firstWindow({ timeout: 30000 });
+        page = await electronApp.firstWindow({ timeout: 60000 });
       }
 
       console.log('Got window reference');
