@@ -33,14 +33,14 @@ jobs:
           chmod +x test-automation/Obsidian.AppImage
           echo "✅ Obsidian AppImage downloaded"
 
-      - name: Install system dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y xvfb libgtk-3-0 libnotify4 libnss3 libxss1 libxtst6 xdg-utils libatspi2.0-0 libdrm2 libgbm1 libasound2
-          echo "✅ System dependencies installed"
-
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
+
+      - name: Install xvfb
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          echo "✅ xvfb installed"
 
       - name: Setup test vault
         run: |
