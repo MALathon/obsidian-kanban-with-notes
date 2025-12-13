@@ -19,7 +19,12 @@
       "react-types": ["./node_modules/@types/react/"]
     },
     "skipLibCheck": true,
-    "target": "es2018"
+    "target": "es2018",
+    "types": [
+      "@wdio/globals/types",
+      "@wdio/mocha-framework",
+      "wdio-obsidian-service"
+    ]
   },
-  "include": ["src/*.ts", "src/*.tsx"]
+  "include": ["src/*.ts", "src/*.tsx", "test/specs/**/*.ts"]
 }

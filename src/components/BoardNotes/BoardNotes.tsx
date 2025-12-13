@@ -17,9 +17,20 @@ interface BoardNotesProps {
 export function BoardNotes({ notes }: BoardNotesProps) {
   const { stateManager, boardModifiers } = useContext(KanbanContext);
   const [editState, setEditState] = useState<EditState>(null);
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const notesRef = useRef<string | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // Get settings
+  const isEnabled = stateManager.useSetting('board-notes-enable');
+  const defaultCollapsed = stateManager.useSetting('board-notes-collapse');
+  const maxHeight = stateManager.useSetting('board-notes-max-height');
+
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(defaultCollapsed ?? false);
+
+  // If board notes are disabled (or not explicitly enabled), don't render anything
+  if (!isEnabled) {
+    return null;
+  }
 
   // Handle save when edit completes
   useEffect(() => {
@@ -114,7 +125,16 @@ export function BoardNotes({ notes }: BoardNotesProps) {
         )}
       </div>
       {!isCollapsed && (
-        <div className={c('board-notes-content')}>
+        <div
+          className={c('board-notes-content')}
+          style={
+            maxHeight === 0
+              ? { maxHeight: 'none' }
+              : maxHeight
+              ? { maxHeight: `${maxHeight}px` }
+              : undefined
+          }
+        >
           {isEditing(editState) ? (
             <div className={c('board-notes-input-wrapper')}>
               <MarkdownEditor

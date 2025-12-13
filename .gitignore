@@ -12,6 +12,12 @@ package-lock.json
 .env
 yarn*
 dist
-test-vault/
+/test-vault/
 main.js
 styles.css
+
+# E2E testing artifacts
+.obsidian-cache/
+wdio-logs/
+allure-results/
+allure-report/

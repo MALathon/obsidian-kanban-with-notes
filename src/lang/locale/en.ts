@@ -282,6 +282,18 @@ const en = {
   'Expand notes': 'Expand notes',
   'Collapse notes': 'Collapse notes',
   'Enter board notes...': 'Enter board notes...',
+
+  // Settings - Board Notes
+  'Board Notes': 'Board Notes',
+  'Enable board notes': 'Enable board notes',
+  'Show a notes section at the top of the board for adding markdown notes above the columns.':
+    'Show a notes section at the top of the board for adding markdown notes above the columns.',
+  'Collapse board notes by default': 'Collapse board notes by default',
+  'When enabled, board notes will be collapsed when opening a board.':
+    'When enabled, board notes will be collapsed when opening a board.',
+  'Board notes max height': 'Board notes max height',
+  'Maximum height of the board notes section in pixels. Set to 0 for no limit.':
+    'Maximum height of the board notes section in pixels. Set to 0 for no limit.',
 };
 
 export type Lang = typeof en;
