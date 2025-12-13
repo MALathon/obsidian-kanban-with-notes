@@ -2,9 +2,9 @@
 
 This project uses **[wdio-obsidian-service](https://github.com/jesse-r-s-hines/wdio-obsidian-service)** for comprehensive end-to-end testing of the Board Notes feature.
 
-## 🎯 What We Test
+## What We Test
 
-### Test Suite Overview: 15 Tests, All Passing ✅
+### Test Suite Overview: 15 Tests, All Passing
 
 **1. Basic Kanban Functionality (4 tests)**
 - Obsidian loads correctly
@@ -16,27 +16,27 @@ This project uses **[wdio-obsidian-service](https://github.com/jesse-r-s-hines/w
 - Board notes are disabled by default (as documented)
 
 **3. Board Notes - Full Feature Suite (10 tests)**
-- ✅ Board notes container displays when enabled
-- ✅ Notes content renders from markdown (text before first `##`)
-- ✅ Frontmatter is properly excluded from display
-- ✅ Collapse/expand button exists and functions
-- ✅ Collapsing/expanding changes visual state
-- ✅ Edit button exists
-- ✅ Edit mode activates with save/cancel buttons
-- ✅ Cancel button exits edit mode
-- ✅ Max-height setting is respected
+- Board notes container displays when enabled
+- Notes content renders from markdown (text before first `##`)
+- Frontmatter is properly excluded from display
+- Collapse/expand button exists and functions
+- Collapsing/expanding changes visual state
+- Edit button exists
+- Edit mode activates with save/cancel buttons
+- Cancel button exits edit mode
+- Max-height setting is respected
 
 ---
 
-## 🔬 Why wdio-obsidian-service?
+## Why wdio-obsidian-service?
 
 [wdio-obsidian-service](https://github.com/jesse-r-s-hines/wdio-obsidian-service) is a **purpose-built** WebdriverIO service for testing Obsidian plugins:
 
-- ✅ **Built for Obsidian** - Understands Obsidian's architecture and APIs
-- ✅ **Helper functions** - `executeObsidianCommand()`, `reloadObsidian()`, etc.
-- ✅ **CI/CD Ready** - Proven to work in GitHub Actions
-- ✅ **Cross-platform** - Windows, macOS, Linux support
-- ✅ **Real UI Testing** - Actual Obsidian app runs, not mocked
+- **Built for Obsidian** - Understands Obsidian's architecture and APIs
+- **Helper functions** - `executeObsidianCommand()`, `reloadObsidian()`, etc.
+- **CI/CD Ready** - Proven to work in GitHub Actions
+- **Cross-platform** - Windows, macOS, Linux support
+- **Real UI Testing** - Actual Obsidian app runs, not mocked
 
 ### Why Not Playwright?
 
