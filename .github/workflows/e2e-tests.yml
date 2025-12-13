@@ -37,7 +37,9 @@ jobs:
           cp -R test-automation/obsidian-mount/Obsidian.app test-automation/
           # Unmount the DMG
           hdiutil detach test-automation/obsidian-mount
-          echo "✅ Obsidian installed"
+          # Remove quarantine attribute to allow app to run in automation
+          xattr -cr test-automation/Obsidian.app
+          echo "✅ Obsidian installed and quarantine removed"
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
